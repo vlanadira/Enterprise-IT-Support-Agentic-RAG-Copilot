@@ -385,7 +385,7 @@ APP_ENV=development
 | `GROQ_MODEL` | Groq model identifier | `openai/gpt-oss-20b` | Optional; default: `openai/gpt-oss-20b` |
 | `OPENAI_MODEL` | OpenAI model identifier | `gpt-4o-mini` | Optional; default: `gpt-4o-mini` |
 | `EMBEDDING_MODEL` | Embedding model for vectorization | `text-embedding-3-small` | Optional; default: `text-embedding-3-small` |
-| `ADMIN_API_KEY` | Secret key for admin endpoints (document ingestion) | `your-secure-key` | Optional; default: `change-me` |
+| `ADMIN_API_KEY` | Secret key for admin endpoints (document ingestion) | `your-secure-key` | Required for document ingestion; unset disables admin access |
 | `APP_ENV` | Application environment | `development` or `production` | Optional; default: `development` |
 
 > [!WARNING]
@@ -597,3 +597,8 @@ Send a question to the copilot.
 ### `POST /api/ingest`
 
 Uploads a document and adds its chunks to Pinecone.
+
+When **Upload & Ingest** is clicked, the UI first checks the provided admin key
+with `POST /api/admin/verify`. The document is sent to `/api/ingest` only after
+that check succeeds. Configure `ADMIN_API_KEY` in the deployment environment;
+if it is unset, document ingestion is disabled.

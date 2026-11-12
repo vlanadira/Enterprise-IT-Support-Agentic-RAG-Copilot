@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#101a2d" />
+  <title>Northstar IT | Support Copilot</title>
+  <link rel="stylesheet" href="/static/css/style.css?v=20261112-1" />
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">N</div>
+      <div>
+        <div class="brand-name">NORTHSTAR</div>
+        <div class="brand-sub">Digital Workplace</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="side-label">Workspace</div>
+      <div class="nav-item active"><span class="nav-icon">◈</span><span class="nav-text">IT Support Copilot</span></div>
+      <div class="nav-item"><span class="nav-icon">▤</span><span class="nav-text">Knowledge Center</span></div>
+      <div class="nav-item"><span class="nav-icon">◷</span><span class="nav-text">My requests</span></div>
+    </div>
+
+    <div>
+      <div class="side-label">Resources</div>
+      <div class="nav-item"><span class="nav-icon">⌘</span><span class="nav-text">IT service catalog</span></div>
+      <div class="nav-item"><span class="nav-icon">ⓘ</span><span class="nav-text">Help & guidelines</span></div>
+    </div>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="help-card">
+      <strong>Need a human?</strong>
+      <p>For urgent incidents or issues that need hands-on support, contact the IT Service Desk.</p>
+      <a href="mailto:it-support@company.com">Contact IT support ↗</a>
+    </div>
+
+    <div class="profile">
+      <div class="avatar">JD</div>
+      <div class="profile-details">
+        <div class="profile-name">Jordan Davis</div>
+        <div class="profile-role">Employee account</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="breadcrumb">Workspace&nbsp; / &nbsp;<b>IT Support Copilot</b></div>
+      <div class="top-right">
+        <span><i class="status-dot"></i>All systems operational</span>
+        <span class="top-date" id="dateLabel"></span>
+      </div>
+    </header>
+
+    <section class="content">
+      <div class="heading-row">
+        <div>
+          <div class="eyebrow">Enterprise IT assistant</div>
+          <h1>How can we help today?</h1>
+          <p class="subtitle">Your central place for IT guidance, troubleshooting, and workplace technology support.</p>
+        </div>
+        <div class="heading-actions">
+            <button class="add-document-btn" id="addDocumentBtn" type="button">
+                + Add Document
+            </button>
+            <div class="secure-pill">
+                <span>▣</span> Company knowledge protected
+            </div>
+        </div>
+      </div>
+
+      <div class="workspace">
+        <section class="chat-panel">
+          <div class="chat-header">
+            <div class="assistant-id">
+              <div class="bot-icon">✳</div>
+              <div>
+                <div class="assistant-name">Northstar Support Copilot</div>
+                <div class="assistant-status">AI assistant · Private knowledge first</div>
+              </div>
+            </div>
+
+            <div class="header-actions">
+              <button class="icon-btn" id="newChatBtn" title="New conversation">＋</button>
+              <button class="icon-btn" id="clearBtn" title="Clear conversation">↻</button>
+            </div>
+          </div>
+
+          <div class="messages" id="messages" aria-live="polite">
+            <div class="welcome" id="welcome">
+              <div class="welcome-symbol">✳</div>
+              <h2>Welcome to IT Support</h2>
+              <p>Ask a question in your own words. I’ll look for guidance in the company knowledge base first, then use external sources if needed.</p>
+
+              <div class="suggestions">
+                <button class="suggestion" data-prompt="How do I reset my company password?">
+                  <span>⌑</span>How do I reset my company password?
+                </button>
+                <button class="suggestion" data-prompt="I can't connect to the company VPN. How can I troubleshoot it?">
+                  <span>⌁</span>I'm having trouble connecting to VPN
+                </button>
+                <button class="suggestion" data-prompt="How do I set up multi-factor authentication (MFA)?">
+                  <span>◉</span>Set up multi-factor authentication
+                </button>
+                <button class="suggestion" data-prompt="I need access to a company software application. What should I do?">
+                  <span>▦</span>Request access to software
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="composer-wrap">
+            <form class="composer" id="chatForm">
+              <textarea
+                id="questionInput"
+                rows="1"
+                placeholder="Describe your IT issue or ask a question..."
+                aria-label="Your IT support question"
+              ></textarea>
+
+              <button class="send-btn" id="sendBtn" type="submit" aria-label="Send message">➤</button>
+            </form>
+
+            <div class="composer-note">
+              <span>Enter to send · Shift + Enter for a new line</span>
+              <span>AI-generated responses may need verification</span>
+            </div>
+          </div>
+        </section>
+
+        <aside class="side-panel">
+          <div class="side-title">ASSISTANT STATUS</div>
+
+          <div class="status-card">
+            <div class="status-head">
+              <span>Knowledge services</span>
+              <span class="online">● Online</span>
+            </div>
+            <div class="status-line"><span>Private knowledge base</span><b>Ready</b></div>
+            <div class="status-line"><span>External search fallback</span><b>Enabled</b></div>
+            <div class="status-line"><span>Evidence validation</span><b>Enabled</b></div>
+          </div>
+
+          <div class="side-title">HOW IT WORKS</div>
+
+          <div class="source-row">
+            <div class="source-icon">▤</div>
+            <div>
+              <strong>Company knowledge first</strong>
+              <p>Searches internal IT documentation and policies.</p>
+            </div>
+          </div>
+
+          <div class="source-row">
+            <div class="source-icon">✓</div>
+            <div>
+              <strong>Evidence validation</strong>
+              <p>Checks whether retrieved information is sufficient.</p>
+            </div>
+          </div>
+
+          <div class="source-row">
+            <div class="source-icon">◎</div>
+            <div>
+              <strong>Web fallback</strong>
+              <p>Uses external search when internal evidence is weak.</p>
+            </div>
+          </div>
+
+          <div class="side-divider"></div>
+
+          <div class="side-title">LIVE ACTIVITY</div>
+          <ol class="trace-list" id="traceList">
+            <li class="empty-trace">Your assistant activity will appear here when you send a question.</li>
+          </ol>
+
+          <div class="side-divider"></div>
+
+          <div class="side-title">RESPONSE SOURCES</div>
+          <div id="sourceInfo" class="empty-trace">
+            Sources used for an answer will be displayed here.
+          </div>
+        </aside>
+      </div>
+
+      <div class="footer">Northstar Digital Workplace · Internal IT support experience</div>
+    </section>
+  </main>
+</div>
+<!-- Add Document Modal -->
+<div
+  class="modal-overlay"
+  id="uploadModal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="uploadModalTitle"
+  hidden
+>
+  <div class="upload-modal">
+
+    <div class="modal-header">
+      <div>
+        <h2 id="uploadModalTitle">Ingest company's document</h2>
+        <p>
+          Upload PDF, TXT, Markdown, or DOCX. The document is chunked,
+          embedded, and indexed into Pinecone.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="modal-close"
+        id="closeUploadModal"
+        aria-label="Close"
+      >
+        &times;
+      </button>
+    </div>
+
+    <form id="uploadForm">
+
+      <div class="form-group">
+        <label for="adminApiKey">Admin API Key</label>
+        <input
+          type="password"
+          id="adminApiKey"
+          placeholder="Enter admin API key"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="documentFile">Choose file</label>
+        <input
+          type="file"
+          id="documentFile"
+          accept=".pdf,.txt,.md,.docx"
+          required
+        />
+        <small>Supported formats: PDF, TXT, MD, DOCX</small>
+      </div>
+
+      <div id="uploadStatus" class="upload-status" role="status"></div>
+
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="cancel-upload-btn"
+          id="cancelUploadBtn"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="submit-upload-btn"
+          id="uploadBtn"
+        >
+          Upload &amp; Ingest
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+<script src="/static/js/app.js?v=20261112-1" defer></script>
+</body>
+</html>
