@@ -28,6 +28,119 @@ function escapeHTML(value) {
   }[c]));
 }
 
+function formatAnswer(value) {
+  const lines = String(value ?? "").replace(/\r\n?/g, "\n").split("\n");
+
+  function formatInline(text) {
+    const code = [];
+    let formatted = escapeHTML(text).replace(/`([^`]+)`/g, (_, content) => {
+      code.push(`<code>${content}</code>`);
+      return `\u0000${code.length - 1}\u0000`;
+    });
+
+    formatted = formatted
+      .replace(/&lt;br\s*\/?&gt;/gi, "<br>")
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>")
+      .replace(/(^|[\s([{])_([^_\n]+)_(?=$|[\s)\]}.,!?;:])/g, "$1<em>$2</em>");
+
+    return formatted.replace(/\u0000(\d+)\u0000/g, (_, index) => code[Number(index)]);
+  }
+
+  function tableCells(line) {
+    return line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map(cell => cell.trim());
+  }
+
+  function isTableSeparator(line) {
+    return /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(line);
+  }
+
+  const html = [];
+  let index = 0;
+  let nextOrderedNumber = null;
+
+  while (index < lines.length) {
+    const line = lines[index].trim();
+
+    if (!line) {
+      index++;
+      continue;
+    }
+
+    if (line.includes("|") && index + 1 < lines.length && isTableSeparator(lines[index + 1])) {
+      nextOrderedNumber = null;
+      const headers = tableCells(line);
+      index += 2;
+      const rows = [];
+
+      while (index < lines.length && lines[index].trim() && lines[index].includes("|")) {
+        rows.push(tableCells(lines[index]));
+        index++;
+      }
+
+      html.push(
+        `<div class="table-wrap"><table><thead><tr>${headers
+          .map(cell => `<th>${formatInline(cell)}</th>`).join("")}</tr></thead><tbody>${rows
+          .map(row => `<tr>${headers.map((_, cellIndex) =>
+            `<td>${formatInline(row[cellIndex] ?? "")}</td>`
+          ).join("")}</tr>`).join("")}</tbody></table></div>`
+      );
+      continue;
+    }
+
+    const heading = line.match(/^(#{1,6})\s+(.+)$/);
+    if (heading) {
+      nextOrderedNumber = null;
+      const level = heading[1].length;
+      html.push(`<h${level}>${formatInline(heading[2])}</h${level}>`);
+      index++;
+      continue;
+    }
+
+    const listItem = line.match(/^\s*([-*+]|\d+[.)])\s+(.+)$/);
+    if (listItem) {
+      const ordered = /^\d/.test(listItem[1]);
+      const tag = ordered ? "ol" : "ul";
+      const start = ordered
+        ? nextOrderedNumber ?? Number.parseInt(listItem[1], 10)
+        : null;
+      const items = [];
+
+      while (index < lines.length) {
+        const item = lines[index].trim().match(/^([-*+]|\d+[.)])\s+(.+)$/);
+        if (!item || /^\d/.test(item[1]) !== ordered) break;
+        items.push(`<li>${formatInline(item[2])}</li>`);
+        index++;
+      }
+
+      if (ordered) {
+        nextOrderedNumber = start + items.length;
+        html.push(`<ol start="${start}">${items.join("")}</ol>`);
+      } else {
+        html.push(`<${tag}>${items.join("")}</${tag}>`);
+      }
+      continue;
+    }
+
+    nextOrderedNumber = null;
+    const paragraph = [line];
+    index++;
+    while (
+      index < lines.length &&
+      lines[index].trim() &&
+      !/^(#{1,6})\s+/.test(lines[index].trim()) &&
+      !/^\s*([-*+]|\d+[.)])\s+/.test(lines[index]) &&
+      !(lines[index].includes("|") && index + 1 < lines.length && isTableSeparator(lines[index + 1]))
+    ) {
+      paragraph.push(lines[index].trim());
+      index++;
+    }
+    html.push(`<p>${paragraph.map(formatInline).join("<br>")}</p>`);
+  }
+
+  return html.join("");
+}
+
 
 // Scroll to latest message
 function scrollToBottom() {
@@ -44,7 +157,7 @@ function addMessage(text, role, meta = {}) {
 
   wrap.className = `message ${role}`;
 
-  const avatar = role === "user" ? "JD" : "✳";
+  const avatar = role === "user" ? "VN" : "✳";
 
   const source = meta.source
     ? `<div class="answer-source ${meta.sourceClass || ""}">
@@ -56,7 +169,7 @@ function addMessage(text, role, meta = {}) {
     <div class="message-avatar">${avatar}</div>
 
     <div>
-      <div class="bubble">${escapeHTML(text)}</div>
+      <div class="bubble">${role === "assistant" ? formatAnswer(text) : escapeHTML(text)}</div>
 
       ${source}
 

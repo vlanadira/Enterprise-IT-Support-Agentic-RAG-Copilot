@@ -23,7 +23,7 @@ An end-to-end **Forward Deployed Engineer (FDE)** project that turns a notebook-
 
 ### Customer
 
-**NovaRetail** is a fictional retail company with 3,000 employees.
+**STELLARIS Group** is a fictional retail company with 3,000 employees.
 
 ### Problem
 

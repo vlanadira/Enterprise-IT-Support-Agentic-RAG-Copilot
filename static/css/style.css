@@ -146,6 +146,23 @@ button, textarea {
   font-weight: 650;
 }
 
+.sidebar .add-document-btn {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 12px;
+  padding: 13px 10px;
+  border: 1px solid #33435e;
+  border-radius: 12px;
+  background: #151f30;
+  color: #ffffff;
+  font-size: 13px;
+}
+
+.sidebar .add-document-btn:hover {
+  background: #1a2942;
+}
+
 .profile {
   display: flex;
   align-items: center;
@@ -466,8 +483,67 @@ h1 {
   font-size: 12px;
   line-height: 1.65;
   color: #364257;
-  white-space: pre-wrap;
+  white-space: normal;
   overflow-wrap: anywhere;
+}
+
+.bubble p {
+  margin: 0 0 10px;
+}
+
+.bubble p:last-child {
+  margin-bottom: 0;
+}
+
+.bubble h1,
+.bubble h2,
+.bubble h3,
+.bubble h4,
+.bubble h5,
+.bubble h6 {
+  margin: 0 0 9px;
+  line-height: 1.35;
+}
+
+.bubble ul,
+.bubble ol {
+  margin: 0 0 10px;
+  padding-left: 22px;
+}
+
+.bubble li + li {
+  margin-top: 4px;
+}
+
+.table-wrap {
+  max-width: 100%;
+  margin: 8px 0 12px;
+  overflow-x: auto;
+}
+
+.bubble table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: inherit;
+}
+
+.bubble th,
+.bubble td {
+  padding: 7px 8px;
+  border: 1px solid #dce3ec;
+  text-align: left;
+  vertical-align: top;
+}
+
+.bubble th {
+  background: #eaf0fb;
+}
+
+.bubble code {
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: #e8edf4;
+  font-family: monospace;
 }
 
 .user .bubble {
@@ -475,6 +551,7 @@ h1 {
   border-color: #e3e9ff;
   border-radius: 12px 3px 12px 12px;
   color: #273b82;
+  white-space: pre-wrap;
 }
 
 .message-meta {
