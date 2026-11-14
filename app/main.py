@@ -28,8 +28,16 @@ templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
+    account_holder_name = settings.account_holder_name.strip()
+    account_initials = "".join(
+        part[0] for part in account_holder_name.split()[:2]
+    ).upper()
     return templates.TemplateResponse(
         request=request,
         name="index.html",
-        context={"app_name": settings.app_name}
+        context={
+            "app_name": settings.app_name,
+            "account_holder_name": account_holder_name,
+            "account_initials": account_initials,
+        }
     )

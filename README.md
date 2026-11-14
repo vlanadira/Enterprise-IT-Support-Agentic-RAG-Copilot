@@ -369,6 +369,8 @@ EMBEDDING_MODEL=text-embedding-3-small
 ADMIN_API_KEY=change-me-in-production
 
 # Application Settings
+ACCOUNT_HOLDER_NAME=Vladdifka Nadira Adha Adrian
+COMPANY_NAME=Stellaris Group
 APP_ENV=development
 ```
 
@@ -386,6 +388,8 @@ APP_ENV=development
 | `OPENAI_MODEL` | OpenAI model identifier | `gpt-4o-mini` | Optional; default: `gpt-4o-mini` |
 | `EMBEDDING_MODEL` | Embedding model for vectorization | `text-embedding-3-small` | Optional; default: `text-embedding-3-small` |
 | `ADMIN_API_KEY` | Secret key for admin endpoints (document ingestion) | `your-secure-key` | Required for document ingestion; unset disables admin access |
+| `ACCOUNT_HOLDER_NAME` | Full name displayed in the account profile; not used as the company or KB name | `Employee Name` | Optional; default: `Vladdifka Nadira Adha Adrian` |
+| `COMPANY_NAME` | Canonical company name used in generated KB answers | `Stellaris Group` | Optional; default: `Stellaris Group` |
 | `APP_ENV` | Application environment | `development` or `production` | Optional; default: `development` |
 
 > [!WARNING]

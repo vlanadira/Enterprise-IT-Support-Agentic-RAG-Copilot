@@ -6,6 +6,8 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 
 class Settings(BaseSettings):
     app_name: str = "Enterprise IT Support Agentic RAG Copilot"
+    account_holder_name: str = "Vladdifka Nadira Adha Adrian"
+    company_name: str = "Stellaris Group"
     app_env: str = "development"
     
     groq_api_key: str = ""

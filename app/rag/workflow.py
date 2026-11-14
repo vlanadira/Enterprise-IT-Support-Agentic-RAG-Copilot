@@ -151,7 +151,10 @@ def generate_from_kb(state: AgentState):
     answer = llm().invoke(f"""
 You are an enterprise IT support copilot. Answer ONLY from the private company KB below.
 Be concise, actionable, and safe. If steps are present, present them clearly.
-Do not invent policy details. Mention that answer is based on the company's private knowledge base.
+Do not invent policy details. The account holder is the employer, not the company knowledge base.
+Do not use the account holder's name as the company or source name.
+The company knowledge base belongs to {settings.company_name}. Attribute the answer to {settings.company_name}'s private knowledge base, not to the account holder.
+Do not identify the company by a different company name found in the retrieved content.
 Question: {state['question']}
 
 Private KB:
