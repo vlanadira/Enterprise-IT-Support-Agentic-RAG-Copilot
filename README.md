@@ -7,7 +7,6 @@
 ![LangGraph](https://img.shields.io/badge/LangGraph-1C3C3C?logo=langchain&logoColor=white)
 ![Pinecone](https://img.shields.io/badge/Pinecone-Vector%20DB-000000)
 ![Groq](https://img.shields.io/badge/Groq-LLM-F55036)
-![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 
 **Stack:** LangGraph · FastAPI · Pinecone · Groq · Tavily · HTML / CSS / JavaScript
 
@@ -25,8 +24,7 @@
 - [8. Demo Scenarios](#8-demo-scenarios)
 - [9. Document Upload Demo](#9-document-upload-demo)
 - [10. API Endpoints](#10-api-endpoints)
-- [11. Docker](#11-docker)
-- [12. Acknowledgements](#12-acknowledgements)
+- [11. Acknowledgements](#11-acknowledgements)
 
 ---
 
@@ -179,7 +177,7 @@ The system therefore controls what to do next based on its current state.
 | API | FastAPI | Backend and REST endpoints |
 | Frontend | HTML, CSS, JavaScript | Employee-facing interface |
 | Audit | SQLite | Basic decision-path logging |
-| Packaging | Docker | Reproducible deployment |
+| Packaging | Reproducible deployment |
 
 ---
 
@@ -226,7 +224,6 @@ FDE_Agentic_RAG_IT_Copilot/
 │
 ├── uploads/
 ├── .env.example
-├── Dockerfile
 ├── ingest_sample_kb.py
 ├── requirements.txt
 ├── run.py
@@ -517,18 +514,7 @@ When **Upload & Ingest** is clicked, the UI first checks the provided admin key 
 
 ---
 
-## 11. Docker
-
-```bash
-docker build -t it-support-copilot .
-docker run -p 8000:8000 --env-file .env it-support-copilot
-```
-
-Then open <http://127.0.0.1:8000>.
-
----
-
-## 12. Acknowledgements
+## 11. Acknowledgements
 
 This project closely follows the end-to-end Agentic RAG production tutorial by **DSwithBappy** on YouTube. I learned the core workflow design, the LangGraph-based routing and grading pattern, and the notebook-to-product approach from his content, then adapted it into this FDE-style IT Support Copilot for the fictional STELLARIS Group.
 
