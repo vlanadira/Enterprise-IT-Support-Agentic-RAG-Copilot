@@ -1,6 +1,15 @@
-# Enterprise IT Support Agentic RAG Copilot
+# 🛠️ Enterprise IT Support Agentic RAG Copilot
 
-An end-to-end **Forward Deployed Engineer (FDE)** project that turns a notebook-style Agentic RAG workflow into a deployable internal product using **LangGraph, FastAPI, Pinecone, Groq, Tavily, HTML, CSS, and JavaScript**.
+> An end-to-end **Forward Deployed Engineer (FDE)** project that turns a notebook-style Agentic RAG workflow into a deployable internal product.
+
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![LangGraph](https://img.shields.io/badge/LangGraph-1C3C3C?logo=langchain&logoColor=white)
+![Pinecone](https://img.shields.io/badge/Pinecone-Vector%20DB-000000)
+![Groq](https://img.shields.io/badge/Groq-LLM-F55036)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
+
+**Stack:** LangGraph · FastAPI · Pinecone · Groq · Tavily · HTML / CSS / JavaScript
 
 ---
 
@@ -16,6 +25,8 @@ An end-to-end **Forward Deployed Engineer (FDE)** project that turns a notebook-
 - [8. Demo Scenarios](#8-demo-scenarios)
 - [9. Document Upload Demo](#9-document-upload-demo)
 - [10. API Endpoints](#10-api-endpoints)
+- [11. Docker](#11-docker)
+- [12. Acknowledgements](#12-acknowledgements)
 
 ---
 
@@ -44,13 +55,13 @@ Employees still create repetitive support tickets because:
 - Internal documents can be incomplete or outdated.
 - Some questions require current vendor information from the public web.
 
-### Example use cases
+### Example Use Cases
 
 **Private knowledge-base question**
 
 > How do I connect to the company VPN from home?
 
-The answer exists in the private company knowledge base (KB), so the system should not search the public internet.
+The answer exists in the private company knowledge base (KB), so the system should **not** search the public internet.
 
 **Current-information question**
 
@@ -74,39 +85,21 @@ Build a secure IT Support Copilot that:
 
 ## 2. Why This Is an FDE Project
 
-A **Forward Deployed Engineer (FDE)** does more than create an LLM notebook. The FDE turns a customer's problem into a usable product.
+A **Forward Deployed Engineer (FDE)** does more than build an LLM notebook. The FDE turns a customer's problem into a usable product.
 
-### Project lifecycle
+### Project Lifecycle
 
-```text
-Customer Problem
-       |
-       v
-Discovery & Requirements
-       |
-       v
-Solution Architecture
-       |
-       v
-Data / Knowledge Integration
-       |
-       v
-Agentic RAG Development
-       |
-       v
-API Development
-       |
-       v
-User Interface
-       |
-       v
-Security + Audit + Testing
-       |
-       v
-Deployment
-       |
-       v
-Observe + Improve
+```mermaid
+flowchart TD
+    A[Customer Problem] --> B[Discovery & Requirements]
+    B --> C[Solution Architecture]
+    C --> D[Data / Knowledge Integration]
+    D --> E[Agentic RAG Development]
+    E --> F[API Development]
+    F --> G[User Interface]
+    G --> H[Security + Audit + Testing]
+    H --> I[Deployment]
+    I --> J[Observe + Improve]
 ```
 
 This repository demonstrates each layer.
@@ -115,101 +108,38 @@ This repository demonstrates each layer.
 
 ## 3. System Architecture
 
-The application follows this high-level architecture:
-
-```text
-                  +---------------------+
-                  |   Employee / User   |
-                  +----------+----------+
-                             |
-                             v
-                  +---------------------+
-                  | HTML / CSS / JS     |
-                  |      Web UI         |
-                  +----------+----------+
-                             |
-                       POST /api/chat
-                             |
-                             v
-                  +---------------------+
-                  |       FastAPI       |
-                  +----------+----------+
-                             |
-                             v
-                  +---------------------+
-                  |     LangGraph       |
-                  | Agentic RAG Control |
-                  +----------+----------+
-                             |
-                  +----------+----------+
-                  |                     |
-                  v                     v
-          +---------------+     +---------------+
-          | Private KB    |     | Tavily Web    |
-          | Pinecone      |     | Search        |
-          +-------+-------+     +-------+-------+
-                  |                     |
-                  +----------+----------+
-                             |
-                             v
-                    +----------------+
-                    |    Groq LLM    |
-                    | Grounded Answer|
-                    +----------------+
+```mermaid
+flowchart TD
+    U[Employee / User] --> UI[HTML / CSS / JS Web UI]
+    UI -->|POST /api/chat| API[FastAPI]
+    API --> LG[LangGraph<br/>Agentic RAG Control]
+    LG --> KB[(Private KB<br/>Pinecone)]
+    LG --> WEB[Tavily Web Search]
+    KB --> LLM[Groq LLM<br/>Grounded Answer]
+    WEB --> LLM
+    LLM --> API
 ```
 
 ---
 
 ## 4. Agentic RAG Workflow
 
-This workflow follows the same core implementation pattern as the reference notebook.
+### Workflow Overview
 
-### Workflow overview
-
-```text
-                         User Question
-                               |
-                               v
-                      [1] Route Question
-                               |
-                 +-------------+-------------+
-                 |                           |
-                 v                           v
-        Greeting / Simple Chat         IT Support Question
-                 |                           |
-                 v                           v
-          Direct Answer          [2] Retrieve from Private KB
-                                             |
-                                             v
-                                    [3] Grade Private Evidence
-                                             |
-                              +--------------+--------------+
-                              |                             |
-                              v                             v
-                            GOOD                           WEAK
-                              |                             |
-                              v                             v
-                      Generate from KB            [4] Tavily Web Search
-                                                            |
-                                                            v
-                                                   [5] Grade Web Evidence
-                                                            |
-                                                +-----------+-----------+
-                                                |                       |
-                                                v                       v
-                                              GOOD                     WEAK
-                                                |                       |
-                                                v                       v
-                                        Generate Web Answer     [6] Rewrite Query
-                                                                        |
-                                                                        v
-                                                               Retry Private KB
-                                                                        |
-                                                                        v
-                                                               Max retries reached?
-                                                                        |
-                                                                        v
-                                                             Insufficient Evidence
+```mermaid
+flowchart TD
+    Q[User Question] --> R{1. Route Question}
+    R -->|Greeting / simple chat| D[Direct Answer]
+    R -->|IT support question| KB[2. Retrieve from Private KB]
+    KB --> G1{3. Grade Private Evidence}
+    G1 -->|GOOD| A1[Generate from KB]
+    G1 -->|WEAK| W[4. Tavily Web Search]
+    W --> G2{5. Grade Web Evidence}
+    G2 -->|GOOD| A2[Generate Web Answer]
+    G2 -->|WEAK| RW[6. Rewrite Query]
+    RW --> M{Max retries reached?}
+    M -->|No| KB
+    M -->|Yes| X[Insufficient Evidence]
 ```
 
 ### Why Agentic?
@@ -309,19 +239,18 @@ FDE_Agentic_RAG_IT_Copilot/
 
 ### Prerequisites
 
-Make sure you have the following:
+- Python 3.10+
+- A [Pinecone](https://www.pinecone.io/) account and API key
+- A [Groq](https://groq.com/) API key
+- A [Tavily](https://tavily.com/) API key
+- An [OpenAI](https://openai.com/) API key (optional fallback LLM)
 
-- Python installed
-- A Pinecone account and API key
-- A Groq API key
-- A Tavily API key
-- An OpenAI API key
-
-### Step 1 — Create a virtual environment
-
-Create a virtual environment named `venv`:
+### Step 1: Clone the repository and create a virtual environment
 
 ```bash
+git clone https://github.com/<your-username>/<your-repo-name>.git
+cd <your-repo-name>
+
 python -m venv venv
 ```
 
@@ -337,15 +266,21 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-### Step 2 — Install dependencies
+### Step 2: Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Step 3 — Configure environment variables
+### Step 3: Configure environment variables
 
-Create a `.env` file in the project root directory and add the following variables:
+Copy the example file and fill in your own keys:
+
+```bash
+cp .env.example .env
+```
+
+Your `.env` should look like this:
 
 ```dotenv
 # LLM API Keys
@@ -360,16 +295,16 @@ PINECONE_API_KEY=your_pinecone_api_key_here
 PINECONE_INDEX_NAME=fde-it-support-rag
 PINECONE_NAMESPACE=company-it-kb
 
-# LLM Models
+# Models
 GROQ_MODEL=openai/gpt-oss-20b
 OPENAI_MODEL=gpt-4o-mini
-EMBEDDING_MODEL=text-embedding-3-small
+EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
 
 # Security
 ADMIN_API_KEY=change-me-in-production
 
 # Application Settings
-ACCOUNT_HOLDER_NAME=Vladdifka Nadira Adha Adrian
+ACCOUNT_HOLDER_NAME=Employee Name
 COMPANY_NAME=Stellaris Group
 APP_ENV=development
 ```
@@ -379,18 +314,18 @@ APP_ENV=development
 | Variable | Description | Example | Required |
 |---|---|---|---|
 | `GROQ_API_KEY` | API key for Groq LLM (routing, grading, generation) | `gsk_...` | Yes |
-| `OPENAI_API_KEY` | API key for OpenAI (embeddings and fallback LLM) | `sk-...` | Yes |
+| `OPENAI_API_KEY` | API key for OpenAI (fallback LLM) | `sk-...` | Optional |
 | `TAVILY_API_KEY` | API key for Tavily web search | `tvly-...` | Yes |
 | `PINECONE_API_KEY` | API key for Pinecone vector database | `pckey-...` | Yes |
-| `PINECONE_INDEX_NAME` | Pinecone index name | `fde-it-support-rag` | Optional; default: `fde-it-support-rag` |
-| `PINECONE_NAMESPACE` | Pinecone namespace for document isolation | `company-it-kb` | Optional; default: `company-it-kb` |
-| `GROQ_MODEL` | Groq model identifier | `openai/gpt-oss-20b` | Optional; default: `openai/gpt-oss-20b` |
-| `OPENAI_MODEL` | OpenAI model identifier | `gpt-4o-mini` | Optional; default: `gpt-4o-mini` |
-| `EMBEDDING_MODEL` | Embedding model for vectorization | `text-embedding-3-small` | Optional; default: `text-embedding-3-small` |
-| `ADMIN_API_KEY` | Secret key for admin endpoints (document ingestion) | `your-secure-key` | Required for document ingestion; unset disables admin access |
-| `ACCOUNT_HOLDER_NAME` | Full name displayed in the account profile; not used as the company or KB name | `Employee Name` | Optional; default: `Vladdifka Nadira Adha Adrian` |
-| `COMPANY_NAME` | Canonical company name used in generated KB answers | `Stellaris Group` | Optional; default: `Stellaris Group` |
-| `APP_ENV` | Application environment | `development` or `production` | Optional; default: `development` |
+| `PINECONE_INDEX_NAME` | Pinecone index name | `fde-it-support-rag` | Optional (default: `fde-it-support-rag`) |
+| `PINECONE_NAMESPACE` | Pinecone namespace for document isolation | `company-it-kb` | Optional (default: `company-it-kb`) |
+| `GROQ_MODEL` | Groq model identifier | `openai/gpt-oss-20b` | Optional (default: `openai/gpt-oss-20b`) |
+| `OPENAI_MODEL` | OpenAI model identifier | `gpt-4o-mini` | Optional (default: `gpt-4o-mini`) |
+| `EMBEDDING_MODEL` | Embedding model for vectorization | `sentence-transformers/all-MiniLM-L6-v2` | Optional |
+| `ADMIN_API_KEY` | Secret key for admin endpoints (document ingestion) | `your-secure-key` | Required for ingestion; if unset, admin access is disabled |
+| `ACCOUNT_HOLDER_NAME` | Name displayed in the account profile (not used as the company or KB name) | `Employee Name` | Optional |
+| `COMPANY_NAME` | Company name used in generated KB answers | `Stellaris Group` | Optional (default: `Stellaris Group`) |
+| `APP_ENV` | Application environment | `development` or `production` | Optional (default: `development`) |
 
 > [!WARNING]
 > **Security notes**
@@ -400,9 +335,7 @@ APP_ENV=development
 > - Use environment variables instead of hardcoding secrets.
 > - Restrict API key access to only the services that need them.
 
-### Step 4 — Load sample company knowledge
-
-Run:
+### Step 4: Load the sample company knowledge
 
 ```bash
 python ingest_sample_kb.py
@@ -410,23 +343,15 @@ python ingest_sample_kb.py
 
 This demonstrates the RAG ingestion pipeline:
 
-```text
-Company Documents
-       |
-       v
-Load Documents
-       |
-       v
-Chunk Text
-       |
-       v
-HuggingFace Embeddings
-       |
-       v
-Pinecone Vector Database
+```mermaid
+flowchart TD
+    A[Company Documents] --> B[Load Documents]
+    B --> C[Chunk Text]
+    C --> D[HuggingFace Embeddings]
+    D --> E[(Pinecone Vector Database)]
 ```
 
-### Step 5 — Run the application
+### Step 5: Run the application
 
 ```bash
 python run.py
@@ -434,14 +359,14 @@ python run.py
 
 Open the application:
 
-- **Web UI:** http://127.0.0.1:8000
-- **FastAPI API documentation:** http://127.0.0.1:8000/docs
+- **Web UI:** <http://127.0.0.1:8000>
+- **FastAPI API documentation:** <http://127.0.0.1:8000/docs>
 
 ---
 
 ## 8. Demo Scenarios
 
-### Demo A — Private KB Success
+### Demo A: Private KB Success
 
 **Ask:**
 
@@ -458,7 +383,7 @@ Generate from Private KB
 
 **Teaching point:** Trusted internal company knowledge is preferred. No public web call is necessary.
 
-### Demo B — Company Policy Question
+### Demo B: Company Policy Question
 
 **Ask:**
 
@@ -477,7 +402,7 @@ Private KB Answer
 
 **Teaching point:** RAG allows the model to answer using company-specific information it was never trained on.
 
-### Demo C — External / Current Information
+### Demo C: External / Current Information
 
 **Ask:**
 
@@ -496,17 +421,17 @@ Web Answer
 
 **Teaching point:** Agentic RAG can choose another information source rather than blindly answering from irrelevant vectors.
 
-### Demo D — Query Rewrite
+### Demo D: Query Rewrite
 
 **Ask a deliberately vague question, such as:**
 
 > My work communication app is acting strange after the new update. What should I do?
 
-If both KB and the first external retrieval are weak, the workflow can rewrite the query and retry.
+If both the KB and the first external retrieval are weak, the workflow can rewrite the query and retry.
 
-**Teaching point:** Retrieval failure does not immediately mean failure. An agent can improve the search query and try again while using a retry guard to avoid loops.
+**Teaching point:** Retrieval failure does not immediately mean failure. An agent can improve the search query and try again, while a retry guard avoids infinite loops.
 
-### Demo E — Direct Conversation
+### Demo E: Direct Conversation
 
 **Ask:**
 
@@ -519,15 +444,13 @@ Router -> DIRECT
 Direct Answer
 ```
 
-**Teaching point:** Not every message should trigger expensive vector search or web search.
+**Teaching point:** Not every message should trigger an expensive vector search or web search.
 
 ---
 
 ## 9. Document Upload Demo
 
-The sidebar contains **Add Company Document**.
-
-Use the `ADMIN_API_KEY` from `.env`.
+The sidebar contains **Add Company Document**. Use the `ADMIN_API_KEY` from your `.env`.
 
 Supported file types:
 
@@ -536,28 +459,16 @@ Supported file types:
 - `.md`
 - `.docx`
 
-### Upload workflow
+### Upload Workflow
 
-```text
-Upload
-   |
-   v
-Validate Type
-   |
-   v
-Load Text
-   |
-   v
-Recursive Chunking
-   |
-   v
-Embeddings
-   |
-   v
-Pinecone Indexing
-   |
-   v
-Immediately Available for Retrieval
+```mermaid
+flowchart TD
+    A[Upload] --> B[Validate Type]
+    B --> C[Load Text]
+    C --> D[Recursive Chunking]
+    D --> E[Embeddings]
+    E --> F[Pinecone Indexing]
+    F --> G[Immediately Available for Retrieval]
 ```
 
 This is useful in an FDE demonstration because the customer does not want to edit Python every time a new policy is published.
@@ -602,7 +513,23 @@ Send a question to the copilot.
 
 Uploads a document and adds its chunks to Pinecone.
 
-When **Upload & Ingest** is clicked, the UI first checks the provided admin key
-with `POST /api/admin/verify`. The document is sent to `/api/ingest` only after
-that check succeeds. Configure `ADMIN_API_KEY` in the deployment environment;
-if it is unset, document ingestion is disabled.
+When **Upload & Ingest** is clicked, the UI first checks the provided admin key with `POST /api/admin/verify`. The document is sent to `/api/ingest` only after that check succeeds. Configure `ADMIN_API_KEY` in the deployment environment; if it is unset, document ingestion is disabled.
+
+---
+
+## 11. Docker
+
+```bash
+docker build -t it-support-copilot .
+docker run -p 8000:8000 --env-file .env it-support-copilot
+```
+
+Then open <http://127.0.0.1:8000>.
+
+---
+
+## 12. Acknowledgements
+
+This project closely follows the end-to-end Agentic RAG production tutorial by **DSwithBappy** on YouTube. I learned the core workflow design, the LangGraph-based routing and grading pattern, and the notebook-to-product approach from his content, then adapted it into this FDE-style IT Support Copilot for the fictional STELLARIS Group.
+
+Huge thanks to **DSwithBappy** for the clear, practical teaching. If you want to learn how to build production-grade Agentic RAG systems, go check out his channel.
