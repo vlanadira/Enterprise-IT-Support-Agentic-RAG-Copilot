@@ -512,7 +512,7 @@ Uploads a document and adds its chunks to Pinecone.
 
 When **Upload & Ingest** is clicked, the UI first checks the provided admin key with `POST /api/admin/verify`. The document is sent to `/api/ingest` only after that check succeeds. Configure `ADMIN_API_KEY` in the deployment environment; if it is unset, document ingestion is disabled.
 
-## Docker Support
+## 11. Docker Support
 
 This project includes Docker configuration to support containerization and provide a consistent application environment across different machines.
 
@@ -550,7 +550,7 @@ This project includes Docker configuration to support containerization and provi
 
 ---
 
-## 11. Acknowledgements
+## 12. Acknowledgements
 
 This project closely follows the end-to-end Agentic RAG production tutorial by **DSwithBappy** on YouTube. I learned the core workflow design, the LangGraph-based routing and grading pattern, and the notebook-to-product approach from his content, then adapted it into this FDE-style IT Support Copilot for the fictional STELLARIS Group.
 
