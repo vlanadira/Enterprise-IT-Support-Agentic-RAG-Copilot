@@ -512,10 +512,46 @@ Uploads a document and adds its chunks to Pinecone.
 
 When **Upload & Ingest** is clicked, the UI first checks the provided admin key with `POST /api/admin/verify`. The document is sent to `/api/ingest` only after that check succeeds. Configure `ADMIN_API_KEY` in the deployment environment; if it is unset, document ingestion is disabled.
 
+## Docker Support
+
+This project includes Docker configuration to support containerization and provide a consistent application environment across different machines.
+
+**Docker files:**
+- `Dockerfile` – Defines the application environment, dependencies, and instructions for building the Docker image.
+- `.dockerignore` – Excludes unnecessary files and directories from the Docker build context, helping reduce image size and avoid copying sensitive or irrelevant files.
+
+**Build and Run Locally**
+
+1. Build the Docker image:
+
+   ```bash
+   docker build -t enterprise-it-support-agent .
+   ```
+
+2. Run the container:
+
+   ```bash
+   docker run -p 8000:8000 --env-file .env enterprise-it-support-agent
+   ```
+
+3. Verify that the container is running:
+
+   ```bash
+   docker ps
+   ```
+
+4. Access the application at:
+
+   ```text
+   http://localhost:8000
+   ```
+
+**Deployment Status:** Docker configuration has been added to support local containerization. Cloud deployment and production container orchestration have not yet been implemented.
+
 ---
 
 ## 11. Acknowledgements
 
 This project closely follows the end-to-end Agentic RAG production tutorial by **DSwithBappy** on YouTube. I learned the core workflow design, the LangGraph-based routing and grading pattern, and the notebook-to-product approach from his content, then adapted it into this FDE-style IT Support Copilot for the fictional STELLARIS Group.
 
-Huge thanks to **DSwithBappy** for the clear, practical teaching. If you want to learn how to build production-grade Agentic RAG systems, go check out his channel.
+Huge thanks to **DSwithBappy** for the clear, practical teaching ☺. If you want to learn how to build production-grade Agentic RAG systems, go check out his channel!
